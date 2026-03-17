@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  --color-matte-black: #121212;
+  --color-deep-charcoal: #1E1E1E;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F1D592;
+  --color-off-white: #E0E0E0;
+}
+
+body {
+  background-color: var(--color-matte-black);
+  color: var(--color-off-white);
+  font-family: var(--font-sans);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.gold-glow {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.gold-glow-focus:focus {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  border-color: var(--color-gold);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #F1D592 50%, #D4AF37 100%);
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  font-family: "Tajawal", sans-serif;
+}

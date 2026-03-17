@@ -1,0 +1,128 @@
+<div class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <header class="w-full max-w-4xl flex justify-between items-center mb-12">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 gold-gradient rounded-lg flex items-center justify-center shadow-lg">
+        <mat-icon class="text-matte-black">auto_awesome</mat-icon>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tighter text-gold">{{ t().title }}</h1>
+    </div>
+    
+    <button 
+      (click)="toggleLanguage()"
+      class="glass px-4 py-2 rounded-full text-sm font-medium border border-gold/20 hover:border-gold/50 transition-all duration-300 flex items-center gap-2"
+    >
+      <mat-icon class="text-gold text-base">language</mat-icon>
+      {{ language() === 'en' ? 'العربية' : 'English' }}
+    </button>
+  </header>
+
+  <main class="w-full max-w-4xl space-y-8">
+    <!-- Configuration Card -->
+    <section class="glass rounded-2xl p-6 sm:p-8 gold-glow space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Format Selector -->
+        <div class="space-y-2">
+          <label for="format-select" class="text-xs uppercase tracking-widest text-gold/60 font-semibold">{{ t().formatLabel }}</label>
+          <div class="relative">
+            <select 
+              id="format-select"
+              [(ngModel)]="format"
+              class="w-full bg-matte-black/50 border border-gold/20 rounded-xl px-4 py-3 text-off-white appearance-none focus:outline-none focus:border-gold transition-all"
+            >
+              @for (f of t().formats; track f; let i = $index) {
+                <option [value]="['Post', 'Reel Script', 'Carousel', 'Story'][i]">{{ f }}</option>
+              }
+            </select>
+            <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gold/40 pointer-events-none">expand_more</mat-icon>
+          </div>
+        </div>
+
+        <!-- Platform Selector -->
+        <div class="space-y-2">
+          <label for="platform-select" class="text-xs uppercase tracking-widest text-gold/60 font-semibold">{{ t().platformLabel }}</label>
+          <div class="relative">
+            <select 
+              id="platform-select"
+              [(ngModel)]="platform"
+              class="w-full bg-matte-black/50 border border-gold/20 rounded-xl px-4 py-3 text-off-white appearance-none focus:outline-none focus:border-gold transition-all"
+            >
+              @for (p of t().platforms; track p; let i = $index) {
+                <option [value]="['Instagram', 'LinkedIn', 'X', 'TikTok'][i]">{{ p }}</option>
+              }
+            </select>
+            <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gold/40 pointer-events-none">expand_more</mat-icon>
+          </div>
+        </div>
+
+        <!-- Tone Selector -->
+        <div class="space-y-2">
+          <label for="tone-select" class="text-xs uppercase tracking-widest text-gold/60 font-semibold">{{ t().toneLabel }}</label>
+          <div class="relative">
+            <select 
+              id="tone-select"
+              [(ngModel)]="tone"
+              class="w-full bg-matte-black/50 border border-gold/20 rounded-xl px-4 py-3 text-off-white appearance-none focus:outline-none focus:border-gold transition-all"
+            >
+              @for (toneItem of t().tones; track toneItem; let i = $index) {
+                <option [value]="['Luxury', 'Professional', 'Creative', 'Witty'][i]">{{ toneItem }}</option>
+              }
+            </select>
+            <mat-icon class="absolute right-3 top-1/2 -translate-y-1/2 text-gold/40 pointer-events-none">expand_more</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="space-y-2">
+        <textarea 
+          [(ngModel)]="prompt"
+          [placeholder]="t().inputPlaceholder"
+          class="w-full h-32 bg-matte-black/50 border border-gold/20 rounded-2xl p-4 text-off-white placeholder:text-off-white/30 focus:outline-none gold-glow-focus transition-all resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Action Button -->
+      <button 
+        (click)="generate()"
+        [disabled]="isGenerating() || !prompt().trim()"
+        class="w-full gold-gradient py-4 rounded-xl text-matte-black font-bold text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3"
+      >
+        @if (isGenerating()) {
+          <div class="w-5 h-5 border-2 border-matte-black border-t-transparent rounded-full animate-spin"></div>
+          {{ t().generating }}
+        } @else {
+          <mat-icon>auto_awesome</mat-icon>
+          {{ t().generateBtn }}
+        }
+      </button>
+    </section>
+
+    <!-- Output Section -->
+    @if (output()) {
+      <section class="output-area glass rounded-2xl p-6 sm:p-8 gold-glow space-y-6 opacity-0">
+        <div class="flex justify-between items-center border-b border-gold/10 pb-4">
+          <h2 class="text-gold font-serif italic text-xl">Generated Content</h2>
+          <button 
+            (click)="copyToClipboard()"
+            class="flex items-center gap-2 text-sm font-medium transition-all"
+            [class.text-emerald-400]="copySuccess()"
+            [class.text-gold]="!copySuccess()"
+          >
+            <mat-icon class="text-base">{{ copySuccess() ? 'check_circle' : 'content_copy' }}</mat-icon>
+            {{ copySuccess() ? t().copied : t().copyBtn }}
+          </button>
+        </div>
+        
+        <div class="whitespace-pre-wrap text-off-white leading-relaxed text-lg font-light">
+          {{ output() }}
+        </div>
+      </section>
+    }
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto pt-12 text-gold/30 text-xs uppercase tracking-widest font-medium">
+    &copy; 2026 Promptly &bull; Crafted with Precision
+  </footer>
+</div>
